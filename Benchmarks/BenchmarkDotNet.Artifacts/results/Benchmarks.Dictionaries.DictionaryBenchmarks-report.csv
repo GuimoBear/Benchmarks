@@ -1,0 +1,5 @@
+Description;Method;Mean;StdDev;Error;Ratio;Gen0;Gen1;Allocated
+Search on dictionary with 60 entries;'Using CollectionsMarshal';181.8 ns;7.66 ns;14.64 ns;0.77;0.0037;0.0017;23 B
+Search on dictionary with 60 entries;'Using TryAdd';193.1 ns;19.87 ns;33.40 ns;0.80;0.0037;0.0017;24 B
+Search on dictionary with 60 entries;'Common way';237.9 ns;19.43 ns;37.16 ns;1.00;0.0037;0.0017;23 B
+Search on dictionary with 60 entries;'Using this[]';440.9 ns;65.41 ns;109.92 ns;1.80;0.0037;0.0017;24 B

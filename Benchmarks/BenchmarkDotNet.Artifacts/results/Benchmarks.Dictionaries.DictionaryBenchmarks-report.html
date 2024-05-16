@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>BenchmarkRun-joined-2024-05-08-17-24-12</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.13.11, Windows 10 (10.0.19045.4291/22H2/2022Update)
+12th Gen Intel Core i7-1265U, 1 CPU, 12 logical and 10 physical cores
+.NET SDK 8.0.101
+  [Host]     : .NET 8.0.1 (8.0.123.58001), X64 RyuJIT AVX2
+  Job-KXICYI : .NET 8.0.1 (8.0.123.58001), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Description                   </th><th>Method              </th><th>Mean</th><th>StdDev</th><th>Error</th><th>Ratio</th><th>Gen0</th><th>Gen1</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>Search on dictionary with 60 entries</td><td>&#39;Using CollectionsMarshal&#39;</td><td>181.8 ns</td><td>7.66 ns</td><td>14.64 ns</td><td>0.77</td><td>0.0037</td><td>0.0017</td><td>23 B</td>
+</tr><tr><td>Search on dictionary with 60 entries</td><td>&#39;Using TryAdd&#39;</td><td>193.1 ns</td><td>19.87 ns</td><td>33.40 ns</td><td>0.80</td><td>0.0037</td><td>0.0017</td><td>24 B</td>
+</tr><tr><td>Search on dictionary with 60 entries</td><td>&#39;Common way&#39;</td><td>237.9 ns</td><td>19.43 ns</td><td>37.16 ns</td><td>1.00</td><td>0.0037</td><td>0.0017</td><td>23 B</td>
+</tr><tr><td>Search on dictionary with 60 entries</td><td>&#39;Using this[]&#39;</td><td>440.9 ns</td><td>65.41 ns</td><td>109.92 ns</td><td>1.80</td><td>0.0037</td><td>0.0017</td><td>24 B</td>
+</tr></tbody></table>
+</body>
+</html>

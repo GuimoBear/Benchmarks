@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>BenchmarkRun-joined-2024-05-08-16-26-33</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.13.11, Windows 10 (10.0.19045.4291/22H2/2022Update)
+12th Gen Intel Core i7-1265U, 1 CPU, 12 logical and 10 physical cores
+.NET SDK 8.0.101
+  [Host]     : .NET 8.0.1 (8.0.123.58001), X64 RyuJIT AVX2
+  Job-DFEXHE : .NET 8.0.1 (8.0.123.58001), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Description</th><th>Params</th><th>Method   </th><th>Mean  </th><th>StdDev</th><th>Error</th><th>Ratio</th><th>Gen0</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>ListValidation</td><td>5</td><td>Bestest</td><td>6.241 ns</td><td>0.3277 ns</td><td>0.4955 ns</td><td>0.03</td><td>-</td><td>-</td>
+</tr><tr><td>ListValidation</td><td>5</td><td>Best</td><td>9.707 ns</td><td>0.8310 ns</td><td>1.2563 ns</td><td>0.04</td><td>-</td><td>-</td>
+</tr><tr><td>ListValidation</td><td>5</td><td>New</td><td>109.046 ns</td><td>9.2558 ns</td><td>13.9934 ns</td><td>0.50</td><td>0.0841</td><td>528 B</td>
+</tr><tr><td>ListValidation</td><td>5</td><td>&#39;Using HashSet&#39;</td><td>147.959 ns</td><td>15.0084 ns</td><td>22.6905 ns</td><td>0.68</td><td>0.0408</td><td>256 B</td>
+</tr><tr><td>ListValidation</td><td>5</td><td>Current</td><td>224.007 ns</td><td>27.1527 ns</td><td>41.0510 ns</td><td>1.00</td><td>0.1743</td><td>1096 B</td>
+</tr><tr><td>ListValidation</td><td>12</td><td>Bestest</td><td>43.999 ns</td><td>4.6748 ns</td><td>7.0677 ns</td><td>0.07</td><td>-</td><td>-</td>
+</tr><tr><td>ListValidation</td><td>12</td><td>Best</td><td>66.017 ns</td><td>7.0087 ns</td><td>10.5962 ns</td><td>0.10</td><td>-</td><td>-</td>
+</tr><tr><td>ListValidation</td><td>12</td><td>New</td><td>333.840 ns</td><td>24.5147 ns</td><td>41.1953 ns</td><td>0.52</td><td>0.1821</td><td>1144 B</td>
+</tr><tr><td>ListValidation</td><td>12</td><td>&#39;Using HashSet&#39;</td><td>337.721 ns</td><td>29.3747 ns</td><td>44.4103 ns</td><td>0.52</td><td>0.0723</td><td>456 B</td>
+</tr><tr><td>ListValidation</td><td>12</td><td>Current</td><td>652.326 ns</td><td>51.9892 ns</td><td>78.6003 ns</td><td>1.00</td><td>0.3975</td><td>2496 B</td>
+</tr><tr><td>ListValidation</td><td>18</td><td>Bestest</td><td>109.328 ns</td><td>11.6592 ns</td><td>17.6270 ns</td><td>0.10</td><td>-</td><td>-</td>
+</tr><tr><td>ListValidation</td><td>18</td><td>Best</td><td>161.962 ns</td><td>17.7971 ns</td><td>26.9067 ns</td><td>0.14</td><td>-</td><td>-</td>
+</tr><tr><td>ListValidation</td><td>18</td><td>&#39;Using HashSet&#39;</td><td>429.416 ns</td><td>12.2768 ns</td><td>18.5608 ns</td><td>0.38</td><td>0.0918</td><td>576 B</td>
+</tr><tr><td>ListValidation</td><td>18</td><td>New</td><td>573.586 ns</td><td>9.4946 ns</td><td>15.9551 ns</td><td>0.50</td><td>0.2656</td><td>1672 B</td>
+</tr><tr><td>ListValidation</td><td>18</td><td>Current</td><td>1,160.653 ns</td><td>163.5009 ns</td><td>247.1900 ns</td><td>1.00</td><td>0.5879</td><td>3696 B</td>
+</tr></tbody></table>
+</body>
+</html>

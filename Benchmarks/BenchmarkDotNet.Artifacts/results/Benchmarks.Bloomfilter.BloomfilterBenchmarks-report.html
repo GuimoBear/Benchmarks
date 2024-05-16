@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>BenchmarkRun-joined-2024-05-15-19-51-18</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.13.11, Windows 10 (10.0.19045.4291/22H2/2022Update)
+12th Gen Intel Core i7-1265U, 1 CPU, 12 logical and 10 physical cores
+.NET SDK 8.0.101
+  [Host]     : .NET 8.0.1 (8.0.123.58001), X64 RyuJIT AVX2
+  Job-OKHWTQ : .NET 8.0.1 (8.0.123.58001), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Description</th><th>Params   </th><th>Method                         </th><th>Mean</th><th>StdDev</th><th>Error</th><th>Ratio</th><th>Iterations count</th><th>Maybe exists</th><th>Not exists</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Add in byte[] BloomFilter&#39;</td><td>113.54 ns</td><td>6.210 ns</td><td>40.13 ns</td><td>1.00</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Add in Span&lt;byte&gt; BloomFilter&#39;</td><td>114.88 ns</td><td>13.561 ns</td><td>52.22 ns</td><td>0.97</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Add in BitArray BloomFilter&#39;</td><td>133.20 ns</td><td>12.501 ns</td><td>48.14 ns</td><td>1.19</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Add in Unsafe byte[] BloomFilter&#39;</td><td>137.37 ns</td><td>9.874 ns</td><td>38.02 ns</td><td>1.23</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Add in Span&lt;bool&gt; BloomFilter&#39;</td><td>147.29 ns</td><td>18.190 ns</td><td>70.04 ns</td><td>1.26</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Add in byte[] BloomFilter&#39;</td><td>126.05 ns</td><td>5.888 ns</td><td>38.05 ns</td><td>1.00</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Add in Unsafe byte[] BloomFilter&#39;</td><td>138.35 ns</td><td>17.863 ns</td><td>68.78 ns</td><td>1.10</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Add in Span&lt;bool&gt; BloomFilter&#39;</td><td>140.76 ns</td><td>16.677 ns</td><td>64.22 ns</td><td>1.15</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Add in BitArray BloomFilter&#39;</td><td>146.91 ns</td><td>24.745 ns</td><td>95.28 ns</td><td>1.14</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Add in Span&lt;byte&gt; BloomFilter&#39;</td><td>165.36 ns</td><td>18.682 ns</td><td>71.94 ns</td><td>1.30</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Add in Unsafe byte[] BloomFilter&#39;</td><td>72.35 ns</td><td>7.188 ns</td><td>27.68 ns</td><td>0.93</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Add in Span&lt;bool&gt; BloomFilter&#39;</td><td>74.95 ns</td><td>8.538 ns</td><td>32.88 ns</td><td>0.96</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Add in Span&lt;byte&gt; BloomFilter&#39;</td><td>77.17 ns</td><td>9.295 ns</td><td>35.79 ns</td><td>0.98</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Add in byte[] BloomFilter&#39;</td><td>78.23 ns</td><td>3.230 ns</td><td>12.44 ns</td><td>1.00</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Add in BitArray BloomFilter&#39;</td><td>78.74 ns</td><td>15.140 ns</td><td>58.30 ns</td><td>1.01</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Add in Span&lt;byte&gt; BloomFilter&#39;</td><td>64.85 ns</td><td>3.850 ns</td><td>24.88 ns</td><td>0.81</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Add in Span&lt;bool&gt; BloomFilter&#39;</td><td>70.19 ns</td><td>9.733 ns</td><td>37.48 ns</td><td>0.91</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Add in BitArray BloomFilter&#39;</td><td>71.41 ns</td><td>5.364 ns</td><td>34.66 ns</td><td>0.90</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Add in Unsafe byte[] BloomFilter&#39;</td><td>77.54 ns</td><td>18.075 ns</td><td>69.60 ns</td><td>0.99</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Add in byte[] BloomFilter&#39;</td><td>78.12 ns</td><td>12.181 ns</td><td>46.91 ns</td><td>1.00</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Search in byte[] BloomFilter&#39;</td><td>132.08 ns</td><td>5.480 ns</td><td>35.41 ns</td><td>1.00</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Search in Unsafe byte[] BloomFilter&#39;</td><td>144.81 ns</td><td>19.927 ns</td><td>76.73 ns</td><td>1.05</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Search in Span&lt;byte&gt; BloomFilter&#39;</td><td>146.13 ns</td><td>11.944 ns</td><td>45.99 ns</td><td>1.08</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Search in BitArray BloomFilter&#39;</td><td>150.07 ns</td><td>9.965 ns</td><td>64.40 ns</td><td>1.14</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 5000000</td><td>&#39;Search in Span&lt;bool&gt; BloomFilter&#39;</td><td>153.08 ns</td><td>13.977 ns</td><td>53.82 ns</td><td>1.12</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Search in Span&lt;bool&gt; BloomFilter&#39;</td><td>133.04 ns</td><td>4.332 ns</td><td>27.99 ns</td><td>0.93</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Search in Span&lt;byte&gt; BloomFilter&#39;</td><td>135.11 ns</td><td>11.603 ns</td><td>44.68 ns</td><td>0.91</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Search in byte[] BloomFilter&#39;</td><td>150.20 ns</td><td>18.228 ns</td><td>70.19 ns</td><td>1.00</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Search in Unsafe byte[] BloomFilter&#39;</td><td>152.22 ns</td><td>34.291 ns</td><td>132.04 ns</td><td>1.01</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,005, 10000000</td><td>&#39;Search in BitArray BloomFilter&#39;</td><td>163.99 ns</td><td>12.223 ns</td><td>47.06 ns</td><td>1.10</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Search in byte[] BloomFilter&#39;</td><td>69.13 ns</td><td>4.118 ns</td><td>26.61 ns</td><td>1.00</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Search in BitArray BloomFilter&#39;</td><td>71.71 ns</td><td>2.849 ns</td><td>18.41 ns</td><td>1.04</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Search in Unsafe byte[] BloomFilter&#39;</td><td>75.14 ns</td><td>12.691 ns</td><td>48.87 ns</td><td>1.02</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Search in Span&lt;byte&gt; BloomFilter&#39;</td><td>77.34 ns</td><td>9.553 ns</td><td>36.79 ns</td><td>1.08</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 5000000</td><td>&#39;Search in Span&lt;bool&gt; BloomFilter&#39;</td><td>80.44 ns</td><td>8.561 ns</td><td>32.96 ns</td><td>1.17</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Search in Unsafe byte[] BloomFilter&#39;</td><td>73.79 ns</td><td>4.555 ns</td><td>29.43 ns</td><td>0.97</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Search in byte[] BloomFilter&#39;</td><td>79.59 ns</td><td>9.470 ns</td><td>36.47 ns</td><td>1.00</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Search in Span&lt;byte&gt; BloomFilter&#39;</td><td>82.67 ns</td><td>11.613 ns</td><td>44.72 ns</td><td>1.04</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Search in Span&lt;bool&gt; BloomFilter&#39;</td><td>83.43 ns</td><td>13.056 ns</td><td>50.27 ns</td><td>1.04</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr><tr><td>Bloomfilter</td><td>0,05, 10000000</td><td>&#39;Search in BitArray BloomFilter&#39;</td><td>87.00 ns</td><td>5.374 ns</td><td>20.69 ns</td><td>1.10</td><td>52428800</td><td>100,0000 %</td><td>0,0000 %</td><td>-</td>
+</tr></tbody></table>
+</body>
+</html>

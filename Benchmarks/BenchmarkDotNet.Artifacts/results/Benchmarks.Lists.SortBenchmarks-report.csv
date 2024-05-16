@@ -1,0 +1,6 @@
+Description;Method;Mean;StdDev;Error;Allocated
+Sort implementation;NativeSort;50.02 μs;3.407 μs;5.150 μs;0 B
+Sort implementation;Quicksort;82.85 μs;1.706 μs;2.867 μs;0 B
+Sort implementation;OptimalQuicksort;98.35 μs;21.767 μs;32.909 μs;0 B
+Sort implementation;Sort;"11,761.49 μs";110.858 μs;167.601 μs;1 B
+Sort implementation;DefaultSort;"12,613.15 μs";285.741 μs;480.169 μs;1 B

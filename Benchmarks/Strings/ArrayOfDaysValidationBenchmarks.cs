@@ -1,5 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -41,12 +41,12 @@ public partial class ArrayOfDaysValidationBenchmarks
     public bool UsingSourceGenerationRegex()
         => ValidArrayOfDaysRegex().IsMatch(Value);
 
-    [Benchmark(Description = "using newtonsoft deserialization")]
-    public bool UsingNewtonsoft()
-    {
-        var array = JsonConvert.DeserializeObject<int[]>(Value)!;
-        return Array.TrueForAll(array, day => day > 0 && day < 32);
-    }
+    //[Benchmark(Description = "using newtonsoft deserialization")]
+    //public bool UsingNewtonsoft()
+    //{
+    //    var array = JsonConvert.DeserializeObject<int[]>(Value)!;
+    //    return Array.TrueForAll(array, day => day > 0 && day < 32);
+    //}
 
     [Benchmark(Description = "using System.Text deserialization")]
     public bool UsingSystemText()

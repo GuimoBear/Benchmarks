@@ -1,0 +1,7 @@
+Description;Method;Mean;StdDev;Error;Ratio;Allocated
+MethodImpl;'With AggressiveOptimization MethodImpl';5.701 μs;0.1690 μs;0.2555 μs;0.99;0 B
+MethodImpl;'Without MethodImpl';5.811 μs;0.5490 μs;0.8300 μs;1.00;0 B
+MethodImpl;'With AggressiveInlining MethodImpl';5.875 μs;0.6031 μs;0.9118 μs;1.02;0 B
+MethodImpl;'With AggressiveInlining and AggressiveOptimization MethodImpl';5.948 μs;0.2039 μs;0.3427 μs;1.03;0 B
+MethodImpl;'With NoInlining MethodImpl';10.589 μs;1.3628 μs;2.0604 μs;1.83;0 B
+MethodImpl;'With NoInlining and NoOptimization MethodImpl';11.834 μs;1.0687 μs;1.6157 μs;2.04;0 B

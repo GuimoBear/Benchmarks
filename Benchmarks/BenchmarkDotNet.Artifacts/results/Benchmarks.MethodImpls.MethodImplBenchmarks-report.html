@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>BenchmarkRun-joined-2024-05-07-13-52-04</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.13.11, Windows 10 (10.0.19045.4291/22H2/2022Update)
+12th Gen Intel Core i7-1265U, 1 CPU, 12 logical and 10 physical cores
+.NET SDK 8.0.101
+  [Host]     : .NET 8.0.1 (8.0.123.58001), X64 RyuJIT AVX2
+  Job-WAHIBZ : .NET 8.0.1 (8.0.123.58001), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Description</th><th>Method                                                   </th><th>Mean</th><th>StdDev</th><th>Error</th><th>Ratio</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>MethodImpl</td><td>&#39;With AggressiveOptimization MethodImpl&#39;</td><td>5.701 &mu;s</td><td>0.1690 &mu;s</td><td>0.2555 &mu;s</td><td>0.99</td><td>-</td>
+</tr><tr><td>MethodImpl</td><td>&#39;Without MethodImpl&#39;</td><td>5.811 &mu;s</td><td>0.5490 &mu;s</td><td>0.8300 &mu;s</td><td>1.00</td><td>-</td>
+</tr><tr><td>MethodImpl</td><td>&#39;With AggressiveInlining MethodImpl&#39;</td><td>5.875 &mu;s</td><td>0.6031 &mu;s</td><td>0.9118 &mu;s</td><td>1.02</td><td>-</td>
+</tr><tr><td>MethodImpl</td><td>&#39;With AggressiveInlining and AggressiveOptimization MethodImpl&#39;</td><td>5.948 &mu;s</td><td>0.2039 &mu;s</td><td>0.3427 &mu;s</td><td>1.03</td><td>-</td>
+</tr><tr><td>MethodImpl</td><td>&#39;With NoInlining MethodImpl&#39;</td><td>10.589 &mu;s</td><td>1.3628 &mu;s</td><td>2.0604 &mu;s</td><td>1.83</td><td>-</td>
+</tr><tr><td>MethodImpl</td><td>&#39;With NoInlining and NoOptimization MethodImpl&#39;</td><td>11.834 &mu;s</td><td>1.0687 &mu;s</td><td>1.6157 &mu;s</td><td>2.04</td><td>-</td>
+</tr></tbody></table>
+</body>
+</html>

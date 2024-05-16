@@ -4,31 +4,38 @@ using System.ComponentModel;
 
 namespace Benchmarks.Lists
 {
-    [Description("Quicksort implementation")]
+    [Description("Sort implementation")]
     [MemoryDiagnoser]
-    public class QuicksortBenchmarks
+    public class SortBenchmarks
     {
         private Random Random;
         public int[] Items = Enumerable.Range(0, 10_000).ToArray();
 
-        //[Benchmark]
-        //public int DefaultSort()
-        //{
-        //    ArrayExtensions.DefaultSort(Items);
-        //    return Items[1_000];
-        //}
+        [Benchmark]
+        public int DefaultSort()
+        {
+            ArrayExtensions.DefaultSort(Items);
+            return Items[1_000];
+        }
 
-        //[Benchmark]
-        //public int Sort()
-        //{
-        //    ArrayExtensions.Sort(Items);
-        //    return Items[1_000];
-        //}
+        [Benchmark]
+        public int Sort()
+        {
+            ArrayExtensions.Sort(Items);
+            return Items[1_000];
+        }
 
         [Benchmark]
         public int Quicksort()
         {
             ArrayExtensions.Quicksort(Items);
+            return Items[1_000];
+        }
+
+        [Benchmark]
+        public int OptimalQuicksort()
+        {
+            ArrayExtensions.OptimalQuicksort(Items);
             return Items[1_000];
         }
 

@@ -5,12 +5,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.11" />
-    <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.8.37221" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Bogus" Version="35.5.1" />
+    <PackageReference Include="HashDepot" Version="3.1.0" />
+    <PackageReference Include="System.IO.Hashing" Version="8.0.0" />
   </ItemGroup>
-
 </Project>
