@@ -1,7 +1,52 @@
 ﻿using BenchmarkDotNet.Running;
 using Benchmarks;
 using Benchmarks.Bloomfilter;
+using Benchmarks.Bloomfilter.Impl;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
+
+//byte @byte = 173;
+//var bits = @byte.GetBits();
+//var newByte = Utils.GetByte(bits);
+//Console.WriteLine();
+
+BenchmarkRunner.Run<BloomfilterBenchmarks>(new Config());
+
+//var hashes = new Dictionary<string, List<string>>();
+//var sizes = new Dictionary<long, List<string>>();
+
+//var buffer = new byte[1024 * 16];
+
+//foreach (var filename in Directory.GetFiles(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files")))
+//{
+//    var size = new FileInfo(filename).Length;
+//    ref var filenames = ref CollectionsMarshal.GetValueRefOrAddDefault(sizes, size, out bool exists);
+//    if (!exists)
+//        filenames = new List<string>();
+//    filenames!.Add(filename);
+
+//    using (var file = File.OpenRead(filename))
+//    {
+//        using (var hashing = IncrementalHash.CreateHash(HashAlgorithmName.SHA512))
+//        {
+//            int count = 0;
+//            while ((count = file.Read(buffer, 0, buffer.Length)) > 0)
+//            {
+//                hashing.AppendData(buffer, 0, count);
+//            }
+//            var hash = Convert.ToBase64String(hashing.GetHashAndReset());
+
+//            ref var newFilenames = ref CollectionsMarshal.GetValueRefOrAddDefault(hashes, hash, out exists);
+//            if (!exists)
+//                newFilenames = new List<string>();
+//            newFilenames!.Add(filename);
+//        }
+//    }
+//}
+
+//Console.WriteLine();
+
 
 //var t1 = new SortBenchmarks();
 //t1.GlobalSetup();
@@ -33,7 +78,8 @@ using System.Text;
 //Console.WriteLine(ArrayExtensions.IsEquivalentTo(t3.Items, t4.Items));
 //Console.WriteLine(ArrayExtensions.IsEquivalentTo(t3.Items, t5.Items));
 
-//using (var indexes = File.CreateText(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "indexes.txt")))
+
+//using (var indexes = File.CreateText(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", "indexes.txt")))
 //{
 //    var faker = new Faker<BloomfilterBenchmarks.Person>()
 //        .UseSeed(914274)
@@ -42,17 +88,18 @@ using System.Text;
 //        .RuleFor(p => p.Document, f => f.Company.Cnpj())
 //        .RuleFor(p => p.Name, f => f.Person.FullName)
 //        .RuleFor(p => p.CoorporateName, f => f.Company.CompanyName());
-//    for (int i = 0; i < 10_000_000; i++)
+//    for (int i = 0; i < 20_000_000; i++)
 //    {
 //        var person = faker.Generate();
 //        var index = $"{person.CompanyId}{person.Document}{person.Name}{person.CoorporateName}";
 //        indexes.WriteLine(index);
-//        if (i % 10_000 == 0)
+//        if (i % 50_000 == 0)
 //        {
-//            Console.WriteLine($"{i:N0} de 10.000.000");
+//            Console.WriteLine($"{i:N0} de 20.000.000");
 //            indexes.Flush();
 //        }
 //    }
+//    Console.WriteLine($"20.000.000 de 20.000.000");
 //    indexes.Flush();
 //    indexes.Close();
 //}
@@ -66,66 +113,81 @@ using System.Text;
 //    .SelectMany(n => new int[] { 5_000_000, 10_000_000, 20_000_000, 50_000_000 }.Select(n2 => (ProbabilityOfFalsePositives: n, ExpectedElementsInTheFilter: n2)))
 //    .ToArray();
 
+//int count = 1;
 //foreach (var (probabilityOfFalsePositives, expectedElementsInTheFilter) in parameters)
 //{
-//var stringBloomFilter = StringBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
-//var bloomFilter = BloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
-//var byteSpanBloomFilter = ByteSpanBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
-//var unsafeBloomFilter = UnsafeBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
-//var spanBloomFilter = SpanBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    var bitArrayBloomFilter = BitArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    var byteArrayBloomFilter = ByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    var byteSpanBloomFilter = ByteSpanBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    var unsafeByteArrayBloomFilter = UnsafeByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    var boolSpanBloomFilter = BoolSpanBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
 
-//var length = indexes.Length;
-//for (int i = 0; i < length; i++)
-//{
-//    var bytes = indexes[i];
+//    var length = indexes.Length;
+//    for (int i = 0; i < length; i++)
+//    {
+//        var bytes = indexes[i];
 
-//    stringBloomFilter.Add(bytes);
-//    bloomFilter.Add(bytes);
-//    byteSpanBloomFilter.Add(bytes);
-//    unsafeBloomFilter.Add(bytes);
-//    spanBloomFilter.Add(bytes);
-//}
+//        bitArrayBloomFilter.Add(bytes);
+//        byteArrayBloomFilter.Add(bytes);
+//        byteSpanBloomFilter.Add(bytes);
+//        unsafeByteArrayBloomFilter.Add(bytes);
+//        boolSpanBloomFilter.Add(bytes);
+//        if (i % 1_000_000 == 0)
+//        {
+//            Console.WriteLine($"{count} de {parameters.Length} - {i:N0} de {length:N0}");
+//        }
+//    }
+//    Console.WriteLine($"{count} de {parameters.Length} - {length:N0} de {length:N0}");
 
-//StringBloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(StringBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newStringBloomFilter);
+//    //BitArrayBloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BitArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newBitArrayBloomFilter);
 
-//if (!stringBloomFilter.Equals(newStringBloomFilter))
-//{
-//    Console.WriteLine("1");
-//}
+//    //if (!bitArrayBloomFilter.Equals(newBitArrayBloomFilter))
+//    //{
+//    //    Console.WriteLine("1");
+//    //    throw new ArgumentException();
+//    //}
 
-//BloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newBloomFilter);
+//    //ByteArrayBloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(ByteArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newByteArrayBloomFilter);
 
-//if (!bloomFilter.Equals(newBloomFilter))
-//{
-//    Console.WriteLine("2");
-//}
+//    //if (!byteArrayBloomFilter.Equals(newByteArrayBloomFilter))
+//    //{
+//    //    Console.WriteLine("2");
+//    //    throw new ArgumentException();
+//    //}
 
-//ByteSpanBloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(ByteSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newByteSpanBloomFilter);
+//    //ByteSpanBloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(ByteSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newByteSpanBloomFilter);
 
-//if (!byteSpanBloomFilter.Equals(newByteSpanBloomFilter))
-//{
-//    Console.WriteLine("3");
-//}
+//    //if (!byteSpanBloomFilter.Equals(newByteSpanBloomFilter))
+//    //{
+//    //    Console.WriteLine("3");
+//    //    throw new ArgumentException();
+//    //}
 
-//UnsafeBloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(UnsafeBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newUnsafeBloomFilter);
+//    //UnsafeByteArrayBloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(UnsafeByteArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newUnsafeByteArrayBloomFilter);
 
-//if (!unsafeBloomFilter.Equals(newUnsafeBloomFilter))
-//{
-//    Console.WriteLine("4");
-//}
+//    //if (!unsafeByteArrayBloomFilter.Equals(newUnsafeByteArrayBloomFilter))
+//    //{
+//    //    Console.WriteLine("4");
+//    //    throw new ArgumentException();
+//    //}
 
-//SpanBloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(SpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newSpanBloomFilter);
+//    //BoolSpanBloomFilter.TryLoad(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BoolSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"), out var newBoolSpanBloomFilter);
 
-//if (!spanBloomFilter.Equals(newSpanBloomFilter))
-//{
-//    Console.WriteLine("5");
-//}
-//break;
-//stringBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(StringBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
-//bloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
-//byteSpanBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(ByteSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
-//unsafeBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(UnsafeBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
-//spanBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(SpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    //if (!boolSpanBloomFilter.Equals(newBoolSpanBloomFilter))
+//    //{
+//    //    Console.WriteLine("5");
+//    //    throw new ArgumentException();
+//    //}
+//    //continue;
+
+//    Console.WriteLine($"{count} de {parameters.Length} - Excrevendo os arquivos");
+//    bitArrayBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BitArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    byteArrayBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(ByteArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    byteSpanBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(ByteSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    unsafeByteArrayBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(UnsafeByteArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    boolSpanBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BoolSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    Console.WriteLine($"{count} de {parameters.Length} - Arquivos escritos");
+//    count++;
 //}
 
 
@@ -155,7 +217,6 @@ using System.Text;
 //bm.SearchInBitArrayBloomFilterBenchmark();
 //bm.SearchInBoolSpanBloomFilterBenchmark();
 
-BenchmarkRunner.Run<BloomfilterBenchmarks>(new Config());
 
 //var random = new Random(564754121);
 

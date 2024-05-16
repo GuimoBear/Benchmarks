@@ -13,7 +13,7 @@ namespace Benchmarks;
 
 public class Config : ManualConfig
 {
-    public const int Iterations = 200;
+    public const int Iterations = 500;
 
     public Config()
     {
@@ -39,10 +39,10 @@ public class Config : ManualConfig
         AddColumnProvider(DefaultColumnProviders.Metrics);
 
         AddJob(Job.Default
-               .WithLaunchCount(1)
-               .WithWarmupCount(0)
+               //.WithLaunchCount(1)
+               //.WithWarmupCount(0)
                .WithUnrollFactor(Iterations)
-               .WithIterationCount(5)
+               .WithIterationCount(10)
         ); 
         Orderer = new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest);
         Options |= ConfigOptions.JoinSummary;
