@@ -33,6 +33,7 @@ public class Config : ManualConfig
         AddColumn(new BenchmarkCustomColumn("Iterations count", UnitType.Size)); //  Your custom column
         AddColumn(new BenchmarkCustomColumn("Maybe exists", UnitType.Size)); //  Your custom column
         AddColumn(new BenchmarkCustomColumn("Not exists", UnitType.Size)); //  Your custom column
+        AddColumn(new BenchmarkCustomColumn("Continue percentage", UnitType.Size)); //  Your custom column
         AddColumn(StatisticColumn.StdDev);
         AddColumn(StatisticColumn.Error);
         AddColumn(BaselineRatioColumn.RatioMean);

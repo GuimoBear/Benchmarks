@@ -2,6 +2,7 @@
 using Benchmarks;
 using Benchmarks.Bloomfilter;
 using Benchmarks.Bloomfilter.Impl;
+using Benchmarks.Strings;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,6 +11,14 @@ using System.Text;
 //var bits = @byte.GetBits();
 //var newByte = Utils.GetByte(bits);
 //Console.WriteLine();
+
+//var bm = new BloomfilterBenchmarks();
+//bm.UsingExistingKeys = false;
+//bm.ProbabilityOfFalsePositives = 0.001;
+//bm.ExpectedElementsInTheFilter = 50_000_000;
+//bm.ByteSpanSetup();
+//bm.IterationSetup();
+//bm.AddInByteSpanBloomFilterBenchmark();
 
 BenchmarkRunner.Run<BloomfilterBenchmarks>(new Config());
 
@@ -105,33 +114,45 @@ BenchmarkRunner.Run<BloomfilterBenchmarks>(new Config());
 //}
 
 //byte[][] indexes = File
-//    .ReadAllLines(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", "indexes.txt"))
+//    .ReadAllLines(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", "ten million indexes.txt"))
+//    .Take(10_000_000)
 //    .Select(Encoding.UTF8.GetBytes)
 //    .ToArray();
 
 //var parameters = new double[] { 0.001, 0.002, 0.005, 0.05 }
-//    .SelectMany(n => new int[] { 5_000_000, 10_000_000, 20_000_000, 50_000_000 }.Select(n2 => (ProbabilityOfFalsePositives: n, ExpectedElementsInTheFilter: n2)))
+//    .SelectMany(n => new int[] { 5_000_000, 10_000_000, 20_000_000, 50_000_000, 100_000_000 }.Select(n2 => (ProbabilityOfFalsePositives: n, ExpectedElementsInTheFilter: n2)))
 //    .ToArray();
 
 //int count = 1;
 //foreach (var (probabilityOfFalsePositives, expectedElementsInTheFilter) in parameters)
 //{
-//    var bitArrayBloomFilter = BitArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
-//    var byteArrayBloomFilter = ByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
-//    var byteSpanBloomFilter = ByteSpanBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
-//    var unsafeByteArrayBloomFilter = UnsafeByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
-//    var boolSpanBloomFilter = BoolSpanBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    //var bitArrayBloomFilter = BitArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    //var byteArrayBloomFilter = ByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    //var byteSpanBloomFilter = ByteSpanBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    //var unsafeByteArrayBloomFilter = UnsafeByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    //var boolSpanBloomFilter = BoolSpanBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
 
-//    var length = indexes.Length;
+//    var tenMillionKeysBloomFilter = ByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    var fiveMillionKeysBloomFilter = ByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    var oneMillionKeysBloomFilter = ByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+//    var halfMillionKeysBloomFilter = ByteArrayBloomFilter.Create(probabilityOfFalsePositives, expectedElementsInTheFilter);
+
+//    var length = 10_000_000;
 //    for (int i = 0; i < length; i++)
 //    {
 //        var bytes = indexes[i];
 
-//        bitArrayBloomFilter.Add(bytes);
-//        byteArrayBloomFilter.Add(bytes);
-//        byteSpanBloomFilter.Add(bytes);
-//        unsafeByteArrayBloomFilter.Add(bytes);
-//        boolSpanBloomFilter.Add(bytes);
+//        //bitArrayBloomFilter.Add(bytes);
+//        //byteArrayBloomFilter.Add(bytes);
+//        //byteSpanBloomFilter.Add(bytes);
+//        //unsafeByteArrayBloomFilter.Add(bytes);
+//        //boolSpanBloomFilter.Add(bytes);
+
+//        tenMillionKeysBloomFilter.Add(bytes);
+//        if (i % 2 == 0) fiveMillionKeysBloomFilter.Add(bytes);
+//        if (i % 10 == 0) oneMillionKeysBloomFilter.Add(bytes);
+//        if (i % 20 == 0) halfMillionKeysBloomFilter.Add(bytes);
+
 //        if (i % 1_000_000 == 0)
 //        {
 //            Console.WriteLine($"{count} de {parameters.Length} - {i:N0} de {length:N0}");
@@ -181,11 +202,18 @@ BenchmarkRunner.Run<BloomfilterBenchmarks>(new Config());
 //    //continue;
 
 //    Console.WriteLine($"{count} de {parameters.Length} - Excrevendo os arquivos");
-//    bitArrayBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BitArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
-//    byteArrayBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(ByteArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
-//    byteSpanBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(ByteSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
-//    unsafeByteArrayBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(UnsafeByteArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
-//    boolSpanBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BoolSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    //bitArrayBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BitArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    //byteArrayBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{probabilityOfFalsePositives:P1} of false positive and {expectedElementsInTheFilter:N0} keys.bloom"));
+//    //byteSpanBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(ByteSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    //unsafeByteArrayBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(UnsafeByteArrayBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+//    //boolSpanBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"{nameof(BoolSpanBloomFilter)} with {probabilityOfFalsePositives}-{expectedElementsInTheFilter}.bloom"));
+
+//    tenMillionKeysBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"10.000.000 keys with {probabilityOfFalsePositives:P1} of false positive and {expectedElementsInTheFilter:N0} keys capacity.bloom"));
+//    fiveMillionKeysBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"5.000.000 keys with {probabilityOfFalsePositives:P1} of false positive and {expectedElementsInTheFilter:N0} keys capacity.bloom"));
+//    oneMillionKeysBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"1.000.000 keys with {probabilityOfFalsePositives:P1} of false positive and {expectedElementsInTheFilter:N0} keys capacity.bloom"));
+//    halfMillionKeysBloomFilter.Save(Path.Combine("C:", "projetos", "Benchmarks", "Benchmarks", "Files", $"500.000 keys with {probabilityOfFalsePositives:P1} of false positive and {expectedElementsInTheFilter:N0} keys capacity.bloom"));
+
+
 //    Console.WriteLine($"{count} de {parameters.Length} - Arquivos escritos");
 //    count++;
 //}
