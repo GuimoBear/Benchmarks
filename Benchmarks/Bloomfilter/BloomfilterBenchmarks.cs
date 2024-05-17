@@ -14,6 +14,7 @@ namespace Benchmarks.Bloomfilter
         //private delegate IBloomFilter Factory(double probabilityOfFalsePositives, int expectedElementsInTheFilter);
         //private static readonly Factory[] FactoryLookup = [StringBloomFilter.Create, Bloomfilter.BloomFilter.Create, SpanBloomFilter.Create];
 
+        private string BenchmarkMethodName;
         private ulong MaybeContains;
         private ulong NotContains;
 
@@ -32,7 +33,7 @@ namespace Benchmarks.Bloomfilter
         public UnsafeByteArrayBloomFilter? UnsafeByteArrayBloomFilter { get; private set; }
         public BoolSpanBloomFilter? BoolSpanBloomFilter { get; private set; }
 
-        [Params(/*10_000_000, 5_000_000, */1_000_000, 500_000)]
+        [Params(10_000_000, 5_000_000, 1_000_000, 500_000)]
         public int NumberOfInsertedKeys
         {
             get => numberOfInsertedKeys;
@@ -55,7 +56,7 @@ namespace Benchmarks.Bloomfilter
                 PostSetup();
             }
         }
-        [Params(/*0.001, 0.002, */0.005, 0.05)]
+        [Params(0.001, 0.002, 0.005, 0.05)]
         public double ProbabilityOfFalsePositives 
         { 
             get => probabilityOfFalsePositives;
@@ -66,7 +67,7 @@ namespace Benchmarks.Bloomfilter
                 PostSetup();
             }
         }
-        [Params(5_000_000, 10_000_000, /*20_000_000, 50_000_000, */100_000_000)]
+        [Params(5_000_000, 10_000_000, 20_000_000, 50_000_000, 100_000_000)]
         public int ExpectedElementsInTheFilter 
         { 
             get => expectedElementsInTheFilter;
@@ -141,6 +142,7 @@ namespace Benchmarks.Bloomfilter
             }
             this.ByteArrayBloomFilter = filter;
             PostSetup();
+            BenchmarkMethodName = nameof(SearchInByteArrayBloomFilterBenchmark);
         }
 
         [GlobalSetup(Targets = [nameof(AddInByteSpanBloomFilterBenchmark), nameof(SearchInByteSpanBloomFilterBenchmark)])]
@@ -157,6 +159,7 @@ namespace Benchmarks.Bloomfilter
             }
             this.ByteSpanBloomFilter = filter;
             PostSetup();
+            BenchmarkMethodName = nameof(SearchInByteSpanBloomFilterBenchmark);
         }
 
         [GlobalSetup(Targets = [nameof(AddInUnsafeBloomFilterBenchmark), nameof(SearchInUnsafeBloomFilterBenchmark)])]
@@ -173,6 +176,7 @@ namespace Benchmarks.Bloomfilter
             }
             this.UnsafeByteArrayBloomFilter = filter;
             PostSetup();
+            BenchmarkMethodName = nameof(SearchInUnsafeBloomFilterBenchmark);
         }
 
         [GlobalSetup(Targets = [nameof(AddInBitArrayBloomFilterBenchmark), nameof(SearchInBitArrayBloomFilterBenchmark)])]
@@ -189,6 +193,7 @@ namespace Benchmarks.Bloomfilter
             }
             this.BitArrayBloomFilter = filter;
             PostSetup();
+            BenchmarkMethodName = nameof(SearchInBitArrayBloomFilterBenchmark);
         }
 
         [GlobalSetup(Targets = [nameof(AddInBoolSpanBloomFilterBenchmark), nameof(SearchInBoolSpanBloomFilterBenchmark)])]
@@ -205,6 +210,7 @@ namespace Benchmarks.Bloomfilter
             }
             this.BoolSpanBloomFilter = filter;
             PostSetup();
+            BenchmarkMethodName = nameof(SearchInBoolSpanBloomFilterBenchmark);
         }
 
         public Guid? CompanyId { get; set; }
@@ -328,12 +334,13 @@ namespace Benchmarks.Bloomfilter
                 var notContains = this.NotContains * 1.0m;
 
                 var maybeExistsPercentage = maybeContains / (maybeContains + notContains);
-                BenchmarkMetadata.Instance.AddMetadata("Iterations count", $"{(int)(this.MaybeContains + this.NotContains)}"); // add benchmark metadata
-                BenchmarkMetadata.Instance.AddMetadata("Maybe exists", $"{this.MaybeContains:N0}"); // add benchmark metadata
-                BenchmarkMetadata.Instance.AddMetadata("Not exists", $"{this.NotContains:N0}"); // add benchmark metadata
-                BenchmarkMetadata.Instance.AddMetadata("Continue percentage", $"{maybeExistsPercentage:P3}"); // add benchmark metadata
-                BenchmarkMetadata.Instance.Save(nameof(BloomfilterBenchmarks));
+                BenchmarkMetadata.Instance.AddMetadata(this, "Iterations count", BenchmarkMethodName, $"{(this.MaybeContains + this.NotContains):N0}"); // add benchmark metadata
+                BenchmarkMetadata.Instance.AddMetadata(this, "Maybe exists", BenchmarkMethodName, $"{this.MaybeContains:N0}"); // add benchmark metadata
+                BenchmarkMetadata.Instance.AddMetadata(this, "Not exists", BenchmarkMethodName, $"{this.NotContains:N0}"); // add benchmark metadata
+                BenchmarkMetadata.Instance.AddMetadata(this, "Continue percentage", BenchmarkMethodName, $"{maybeExistsPercentage:P3}"); // add benchmark metadata
             }
+            BenchmarkMethodName = "";
+            this.MaybeContains = this.NotContains = 0;
         }
 
         //[Benchmark(Description = "Using SortedSet")]

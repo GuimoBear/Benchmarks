@@ -28,19 +28,16 @@ namespace Benchmarks.Utils
             UnitType = unitType;
         }
 
-        public string GetValue(Summary summary, BenchmarkCase benchmarkCase)
+        public string? GetValue(Summary summary, BenchmarkCase benchmarkCase)
         {
-            string benchmarkName = benchmarkCase.Descriptor.WorkloadMethod.DeclaringType.Name;
+            string benchmarkClassName = benchmarkCase.Descriptor.WorkloadMethod.DeclaringType.Name;
+            string benchmarkMethodName = benchmarkCase.Descriptor.WorkloadMethod.Name;
 
-            BenchmarkMetadata.Instance.Load($"{benchmarkName}");
-            var metadata = BenchmarkMetadata.Instance.GetMetdata(ColumnName);
-            if (metadata?.Count > 0)
+            BenchmarkMetadata.Instance.Load(benchmarkClassName);
+            var value = BenchmarkMetadata.Instance.GetMetdata(ColumnName, benchmarkMethodName, benchmarkCase.Parameters.PrintInfo);
+            if (value is not null)
             {
-                object value = metadata.Values.LastOrDefault();
-                if (value != null)
-                    return value.ToString();
-                else
-                    return "N/A";
+                return value!.ToString();
             }
             else
                 return "N/A";
