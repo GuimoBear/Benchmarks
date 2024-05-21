@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Benchmarks.Bloomfilter
@@ -14,21 +15,86 @@ namespace Benchmarks.Bloomfilter
 
         public static void SaveBloomFilter(double probabilityOfFalsePositives, int expectedElementsInTheFilter, int hashingCount, int bitsCount, ReadOnlySpan<byte> bytes, string filename)
         {
-            using (var file = File.Create(filename, bytes.Length + 8))
+            using (var file = File.Create(filename, 1024 * 16))
             {
                 Write(file, BitConverter.GetBytes(probabilityOfFalsePositives));
                 Write(file, BitConverter.GetBytes(expectedElementsInTheFilter));
                 Write(file, BitConverter.GetBytes(hashingCount));
                 Write(file, BitConverter.GetBytes(bitsCount));
                 Write(file, BitConverter.GetBytes(bytes.Length));
-                Write(file, bytes);
+                Write(file, bytes, true);
                 file.Flush();
                 file.Close();
             }
         }
 
-        private static void Write(FileStream file, ReadOnlySpan<byte> bytes)
-            => file.Write(bytes);
+        const int MSB = 1 << 31;
+
+        private static void Write(FileStream file, ReadOnlySpan<byte> bytes, bool tryCompress = false)
+        {
+            if (!tryCompress)
+            {
+                file.Write(bytes);
+                return;
+            }
+
+            const int halfOfInt = 1 << 15;
+
+            int numberOfBytes = 0;
+            Dictionary<byte, List<int>> bytesIndexes = new Dictionary<byte, List<int>>();
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                var @byte = bytes[i];
+                if (@byte > 0)
+                {
+                    ref var counter = ref CollectionsMarshal.GetValueRefOrAddDefault(bytesIndexes, @byte, out var exists);
+                    if (!exists)
+                    {
+                        counter = new List<int> { i };
+                        numberOfBytes += sizeof(byte) + sizeof(int);
+                    }
+                    else
+                        counter.Add(i);
+                    numberOfBytes += i >= halfOfInt ? sizeof(int) : 2;
+                }
+            }
+            if (numberOfBytes < bytes.Length)
+            {
+                file.WriteByte(1);
+                foreach (var (@byte, indexes) in bytesIndexes)
+                {
+                    file.WriteByte(@byte);
+                    //file.Write(BitConverter.GetBytes(indexes.Count));
+                    var span = CollectionsMarshal.AsSpan(indexes);
+                    for (int i = 0; i < span.Length; i++)
+                    {
+                        var index = span[i];
+                        if (index < halfOfInt && span.Length > i + 1)
+                        {
+                            var nextIndex = span[i + 1];
+                            if (nextIndex < halfOfInt)
+                            {
+                                index <<= 16;
+                                index |= nextIndex;
+                                index |= MSB;
+                                i++;
+                            }
+                        }
+                        file.Write(BitConverter.GetBytes(index));
+                        if (file.Position == 278)
+                        {
+                            Console.WriteLine();
+                        }
+                    }
+                    file.Write(BitConverter.GetBytes(-1));
+                }
+            }
+            else
+            {
+                file.WriteByte(0);
+                file.Write(bytes);
+            }
+        }
 
         public static (double ProbabilityOfFalsePositives, int ExpectedElementsInTheFilter, int HashingCount, int BitsCount, byte[] Bytes) ReadBloomFilter(string filename)
         {
@@ -45,7 +111,7 @@ namespace Benchmarks.Bloomfilter
                 bitsCount = file.Read(sizeof(int), BitConverter.ToInt32);
                 var byteArrayLength = file.Read(sizeof(int), BitConverter.ToInt32);
                 buffer = new byte[byteArrayLength];
-                file.Read(buffer);
+                Read(file, buffer);
                 file.Close();
             }
             return (probabilityOfFalsePositives, expectedElementsInTheFilter, hashingCount, bitsCount, buffer);
@@ -58,6 +124,47 @@ namespace Benchmarks.Bloomfilter
             var buffer = new byte[size];
             file.Read(buffer);
             return factory(buffer);
+        }
+
+        private static void Read(FileStream file, Span<byte> buffer)
+        {
+            var compressed = Convert.ToBoolean(file.ReadByte());
+            if (compressed)
+            {
+                Span<byte> indexBytes = stackalloc byte[4];
+                Span<byte> bytes = stackalloc byte[1];
+                while (file.Position < file.Length)
+                {
+                    file.Read(bytes);
+                    byte currentByte = bytes[0];
+                    file.Read(indexBytes);
+                    int readedIndex = BitConverter.ToInt32(indexBytes);
+                    do
+                    {
+                        if (readedIndex < 0)
+                        {
+                            readedIndex &= ~MSB;
+
+                            var newIndex = (readedIndex & ~0x0000ffff) >> 16;
+                            var newNextIndex = (readedIndex & 0x0000ffff);
+
+                            buffer[newIndex] = currentByte;
+                            buffer[newNextIndex] = currentByte;
+                        }
+                        else
+                        {
+                            buffer[readedIndex] = currentByte;
+                        }
+                        file.Read(indexBytes);
+                        readedIndex = BitConverter.ToInt32(indexBytes);
+                    }
+                    while (readedIndex != -1);
+                }
+            }
+            else
+            {
+                file.Read(buffer);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

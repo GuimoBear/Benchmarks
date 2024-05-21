@@ -17,6 +17,9 @@ public class Config : ManualConfig
 
     public Config()
     {
+         SummaryStyle = 
+            BenchmarkDotNet.Reports.SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend);
+
         AddLogger(ConsoleLogger.Default);
 
         AddExporter(CsvExporter.Default);

@@ -1,20 +1,21 @@
-﻿using HashDepot;
+﻿using Benchmarks.Hashing;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Benchmarks.Bloomfilter.Impl;
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-public sealed class BoolSpanBloomFilter : IBloomFilter, IEquatable<BoolSpanBloomFilter>
+public sealed class Murmur3BitArrayBloomFilter : IBloomFilter, IEquatable<Murmur3BitArrayBloomFilter>
 {
     private readonly double _probabilityOfFalsePositives;
     private readonly int _expectedElementsInTheFilter;
 
-    private readonly Memory<bool> _filter;
+    private readonly BitArray _filter;
     private readonly int _bitsCount;
     private readonly int _hashingCount;
 
-    public BoolSpanBloomFilter(double probabilityOfFalsePositives, int expectedElementsInTheFilter)
+    public Murmur3BitArrayBloomFilter(double probabilityOfFalsePositives, int expectedElementsInTheFilter)
     {
         _probabilityOfFalsePositives = probabilityOfFalsePositives;
         _expectedElementsInTheFilter = expectedElementsInTheFilter;
@@ -23,11 +24,11 @@ public sealed class BoolSpanBloomFilter : IBloomFilter, IEquatable<BoolSpanBloom
         var numberOfHashFunctions = (int)Math.Round(filterSize / expectedElementsInTheFilter * Math.Log(2.0));
 
         _bitsCount = filterSize;
-        _filter = new Memory<bool>(new bool[filterSize]);
+        _filter = new BitArray(filterSize);
         _hashingCount = numberOfHashFunctions;
     }
 
-    private BoolSpanBloomFilter(double probabilityOfFalsePositives, int expectedElementsInTheFilter, int hashingCount, int bitsCount, byte[] bytes)
+    private Murmur3BitArrayBloomFilter(double probabilityOfFalsePositives, int expectedElementsInTheFilter, int hashingCount, int bitsCount, byte[] bytes)
     {
         _probabilityOfFalsePositives = probabilityOfFalsePositives;
         _expectedElementsInTheFilter = expectedElementsInTheFilter;
@@ -35,7 +36,7 @@ public sealed class BoolSpanBloomFilter : IBloomFilter, IEquatable<BoolSpanBloom
         _hashingCount = hashingCount;
         _bitsCount = bitsCount;
 
-        _filter = new Memory<bool>(bytes
+        _filter = new BitArray(bytes
             .SelectMany(b => b.GetBits())
             .Take(bitsCount)
             .ToArray());
@@ -48,8 +49,9 @@ public sealed class BoolSpanBloomFilter : IBloomFilter, IEquatable<BoolSpanBloom
         var filterSize = this._bitsCount;
         for (uint i = 0; i < hashingCount; i++)
         {
-            var index = XXHash.Hash32(bytes, i) % filterSize;
-            filter.Span[(int)index] = true;
+            var hash = MurmurHash3.Hash32(ref bytes, i);
+            var index = hash % filterSize;
+            filter[(int)index] = true;
         }
     }
 
@@ -60,26 +62,28 @@ public sealed class BoolSpanBloomFilter : IBloomFilter, IEquatable<BoolSpanBloom
         var filterSize = this._bitsCount;
         for (uint i = 0; i < hashingCount; i++)
         {
-            var index = XXHash.Hash32(bytes, i) % filterSize;
-            if (filter.Span[(int)index] == false)
+            var hash = MurmurHash3.Hash32(ref bytes, i);
+            var index = hash % filterSize;
+            if (filter[(int)index] == false)
                 return false;
         }
 
         return true;
     }
 
-    public bool Equals(BoolSpanBloomFilter? other)
+    public bool Equals(Murmur3BitArrayBloomFilter? other)
     {
         if (other == null) return false;
         if (_probabilityOfFalsePositives != other._probabilityOfFalsePositives ||
             _expectedElementsInTheFilter != other._expectedElementsInTheFilter ||
             _bitsCount != other._bitsCount ||
             _hashingCount != other._hashingCount ||
-            _filter.Length != other._filter.Length) return false;
-        var length = _filter.Length;
+            _filter.Length != other._filter.Length ||
+            _filter.Count != other._filter.Count) return false;
+        var length = _filter.Count;
         for (int i = 0; i < length; i++)
         {
-            if (_filter.Span[i] != other._filter.Span[i])
+            if (_filter[i] != other._filter[i])
                 return false;
         }
         return true;
@@ -90,22 +94,14 @@ public sealed class BoolSpanBloomFilter : IBloomFilter, IEquatable<BoolSpanBloom
         const int BitShiftPerByte = 3;
         var size = (int)((uint)(this._bitsCount - 1 + (1 << BitShiftPerByte)) >> BitShiftPerByte);
         var bytes = new byte[size];
-        var slice = this._filter.Span;
-
-        var length = bytes.Length;
-        for (int i = 0; i < length; i++)
-        {
-            var newSlice = slice.Length >= 8 ? slice.Slice(0, 8) : slice;
-            bytes[i] = Utils.GetByte(newSlice);
-            slice = slice.Slice(newSlice.Length);
-        }
+        _filter.CopyTo(bytes, 0);
         Utils.SaveBloomFilter(_probabilityOfFalsePositives, _expectedElementsInTheFilter, _hashingCount, _bitsCount, bytes, filename);
     }
 
-    public static BoolSpanBloomFilter Create(double probabilityOfFalsePositives, int expectedElementsInTheFilter)
-        => new BoolSpanBloomFilter(probabilityOfFalsePositives, expectedElementsInTheFilter);
+    public static Murmur3BitArrayBloomFilter Create(double probabilityOfFalsePositives, int expectedElementsInTheFilter)
+        => new Murmur3BitArrayBloomFilter(probabilityOfFalsePositives, expectedElementsInTheFilter);
 
-    public static bool TryLoad(string filename, [NotNullWhen(true)] out BoolSpanBloomFilter? filter)
+    public static bool TryLoad(string filename, [NotNullWhen(true)] out Murmur3BitArrayBloomFilter? filter)
     {
         if (!File.Exists(filename))
         {
@@ -113,7 +109,7 @@ public sealed class BoolSpanBloomFilter : IBloomFilter, IEquatable<BoolSpanBloom
             return false;
         }
         var (probabilityOfFalsePositives, expectedElementsInTheFilter, hashingCount, bitsCount, bytes) = Utils.ReadBloomFilter(filename);
-        filter = new BoolSpanBloomFilter(probabilityOfFalsePositives, expectedElementsInTheFilter, hashingCount, bitsCount, bytes);
+        filter = new Murmur3BitArrayBloomFilter(probabilityOfFalsePositives, expectedElementsInTheFilter, hashingCount, bitsCount, bytes);
         return true;
     }
 }
