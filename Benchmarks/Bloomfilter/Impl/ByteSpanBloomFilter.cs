@@ -40,7 +40,7 @@ public sealed class ByteSpanBloomFilter : IBloomFilter, IEquatable<ByteSpanBloom
     /// Three least significant bits
     /// </summary>
     const int THREE_LSB = 7;
-    public void Add(ref ReadOnlySpan<byte> bytes)
+    public void Add(ReadOnlySpan<byte> bytes)
     {
         var hashingCount = this._hashingCount;
         var bitsCount = this._bitsCount;
@@ -55,7 +55,7 @@ public sealed class ByteSpanBloomFilter : IBloomFilter, IEquatable<ByteSpanBloom
         }
     }
 
-    public bool MaybeContains(ref ReadOnlySpan<byte> bytes)
+    public bool MaybeContains(ReadOnlySpan<byte> bytes)
     {
         var hashingCount = this._hashingCount;
         var bitsCount = this._bitsCount;

@@ -42,7 +42,7 @@ public sealed class UnoptimizedMurmur3BitArrayBloomFilter : IBloomFilter, IEquat
             .ToArray());
     }
 
-    public void Add(ref ReadOnlySpan<byte> bytes)
+    public void Add(ReadOnlySpan<byte> bytes)
     {
         var hashingCount = this._hashingCount;
         var filter = this._filter;
@@ -55,7 +55,7 @@ public sealed class UnoptimizedMurmur3BitArrayBloomFilter : IBloomFilter, IEquat
         }
     }
 
-    public bool MaybeContains(ref ReadOnlySpan<byte> bytes)
+    public bool MaybeContains(ReadOnlySpan<byte> bytes)
     {
         var hashingCount = this._hashingCount;
         var filter = this._filter;

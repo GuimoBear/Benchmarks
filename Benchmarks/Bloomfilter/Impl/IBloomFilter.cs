@@ -2,8 +2,8 @@
 
 public interface IBloomFilter
 {
-    void Add(ref ReadOnlySpan<byte> bytes);
-    bool MaybeContains(ref ReadOnlySpan<byte> bytes);
+    void Add(ReadOnlySpan<byte> bytes);
+    bool MaybeContains(ReadOnlySpan<byte> bytes);
 
     void Save(string filename);
 }
