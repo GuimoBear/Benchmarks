@@ -70,7 +70,6 @@ namespace Benchmarks.Bloomfilter
                 foreach (var (@byte, indexes) in bytesIndexes)
                 {
                     file.WriteByte(@byte);
-                    //file.Write(BitConverter.GetBytes(indexes.Count));
                     var span = CollectionsMarshal.AsSpan(indexes);
                     int previousIndex = 0;
                     for (int i = 0; i < span.Length; i++)
@@ -89,12 +88,11 @@ namespace Benchmarks.Bloomfilter
                                 index = newIndex;
                                 previousIndex = span[i + 1];
                                 i++;
+                                goto Write;
                             }
-                            else
-                                previousIndex = span[i];
                         }
-                        else
-                            previousIndex = span[i];
+                        previousIndex = index;
+                        Write:
                         file.Write(BitConverter.GetBytes(index));
                     }
                     file.Write(BitConverter.GetBytes(-1));
