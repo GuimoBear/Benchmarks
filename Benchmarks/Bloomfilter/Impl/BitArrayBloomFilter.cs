@@ -87,13 +87,13 @@ public sealed class BitArrayBloomFilter : IBloomFilter, IEquatable<BitArrayBloom
         return true;
     }
 
-    public void Save(string filename)
+    public void Save(string filename, bool tryCompress)
     {
         const int BitShiftPerByte = 3;
         var size = (int)((uint)(this._bitsCount - 1 + (1 << BitShiftPerByte)) >> BitShiftPerByte);
         var bytes = new byte[size];
         _filter.CopyTo(bytes, 0);
-        Utils.SaveBloomFilter(_probabilityOfFalsePositives, _expectedElementsInTheFilter, _hashingCount, _bitsCount, bytes, filename);
+        Utils.SaveBloomFilter(_probabilityOfFalsePositives, _expectedElementsInTheFilter, _hashingCount, _bitsCount, bytes, filename, tryCompress);
     }
 
     public static BitArrayBloomFilter Create(double probabilityOfFalsePositives, int expectedElementsInTheFilter)

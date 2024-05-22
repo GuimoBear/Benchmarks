@@ -85,7 +85,7 @@ public sealed class BoolSpanBloomFilter : IBloomFilter, IEquatable<BoolSpanBloom
         return true;
     }
 
-    public void Save(string filename)
+    public void Save(string filename, bool tryCompress)
     {
         const int BitShiftPerByte = 3;
         var size = (int)((uint)(this._bitsCount - 1 + (1 << BitShiftPerByte)) >> BitShiftPerByte);
@@ -99,7 +99,7 @@ public sealed class BoolSpanBloomFilter : IBloomFilter, IEquatable<BoolSpanBloom
             bytes[i] = Utils.GetByte(newSlice);
             slice = slice.Slice(newSlice.Length);
         }
-        Utils.SaveBloomFilter(_probabilityOfFalsePositives, _expectedElementsInTheFilter, _hashingCount, _bitsCount, bytes, filename);
+        Utils.SaveBloomFilter(_probabilityOfFalsePositives, _expectedElementsInTheFilter, _hashingCount, _bitsCount, bytes, filename, tryCompress);
     }
 
     public static BoolSpanBloomFilter Create(double probabilityOfFalsePositives, int expectedElementsInTheFilter)

@@ -90,9 +90,9 @@ public sealed class ByteSpanBloomFilter : IBloomFilter, IEquatable<ByteSpanBloom
         return true;
     }
 
-    public void Save(string filename)
+    public void Save(string filename, bool tryCompress)
     {
-        Utils.SaveBloomFilter(_probabilityOfFalsePositives, _expectedElementsInTheFilter, _hashingCount, _bitsCount, _filter, filename);
+        Utils.SaveBloomFilter(_probabilityOfFalsePositives, _expectedElementsInTheFilter, _hashingCount, _bitsCount, _filter, filename, tryCompress);
     }
 
     public static ByteSpanBloomFilter Create(double probabilityOfFalsePositives, int expectedElementsInTheFilter)

@@ -5,5 +5,5 @@ public interface IBloomFilter
     void Add(ReadOnlySpan<byte> bytes);
     bool MaybeContains(ReadOnlySpan<byte> bytes);
 
-    void Save(string filename);
+    void Save(string filename, bool tryCompress);
 }
